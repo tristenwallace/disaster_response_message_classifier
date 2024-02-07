@@ -1,6 +1,14 @@
 # Imports
 import pandas as pd
 from sqlalchemy import create_engine
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import wordpunct_tokenize
+from nltk.stem.porter import PorterStemmer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+
+nltk.download("stopwords")
 
 ##############################################################################
 
@@ -28,9 +36,46 @@ def load_data():
     catagories = y.columns.values 
     return X.values, y.values, catagories
 
+##############################################################################
+
+def tokenize(text):
+    """ Tokenizes input text
+    
+    INPUT
+    text (str): text data as str
+    
+    OUTPUT
+    tokens (list): tokenized text
+    """
+
+    # Replace all urls with a urlplaceholder string
+    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    
+    # Extract all the urls from the provided text 
+    detected_urls = re.findall(url_regex, text)
+    
+    # Replace url with a url placeholder string
+    for detected_url in detected_urls:
+        text = text.replace(detected_url, 'url')
+    
+    # split text strings into tokens
+    tokens = wordpunct_tokenize(text.lower().strip())
+    
+    # Remove stopwords
+    rm = set(stopwords.words("english"))
+    tokens= list(set(tokens) - rm)
+
+    # stem tokens
+    tokens =  [PorterStemmer().stem(w) for w in tokens]
+
+    return tokens
+
+##############################################################################
+
 def main():
     X, y, cats = load_data()
-    print(cats)
+    tokens = tokenize(X[0])
+    print(tokens)
 
 if __name__ == '__main__':
     main()

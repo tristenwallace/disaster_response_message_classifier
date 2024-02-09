@@ -80,7 +80,14 @@ def tokenize(text):
 ##############################################################################
 
 def split_data(X, Y):
-    '''
+    ''' Split data into train and test arrays
+
+    INPUT
+        X (array): array containing messages 
+        Y (array): array containing binary catagory values
+
+    OUTPUT
+        train and test arrays 
     '''
     
     mskf = mlsKFold(n_splits=2, shuffle=True, random_state=42)
@@ -94,7 +101,7 @@ def split_data(X, Y):
 ##############################################################################
 
 def build_model():
-    '''
+    ''' Return classification model
     '''
 
     pipeline = Pipeline([
@@ -108,7 +115,7 @@ def build_model():
 ##############################################################################
 
 def save_model(model):
-    '''
+    ''' Save trained classification model to pickle file
     '''
     
     with open('../models/message_classifier.pkl', "wb") as f:

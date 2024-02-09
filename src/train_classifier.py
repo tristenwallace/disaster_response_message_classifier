@@ -1,4 +1,5 @@
 # Imports
+import sys
 import pandas as pd
 from sqlalchemy import create_engine
 import re
@@ -7,6 +8,12 @@ from nltk.corpus import stopwords
 from nltk.tokenize import wordpunct_tokenize
 from nltk.stem.porter import PorterStemmer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from iterstrat.ml_stratifiers import MultilabelStratifiedKFold as mlsKFold
+from sklearn.pipeline import Pipeline
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.neighbors import KNeighborsClassifier
+import pickle
+
 
 nltk.download("stopwords")
 
@@ -17,7 +24,7 @@ def load_data():
 
     OUTPUT
         X (array): array containing messages 
-        y (array): array containing binary catagory values 
+        Y (array): array containing binary catagory values 
         cats (list): list containing category names
     '''
     
@@ -32,21 +39,21 @@ def load_data():
     df.drop('child_alone', axis=1, inplace=True)
 
     X = df.message
-    y = df.drop('message', axis=1)
-    catagories = y.columns.values 
-    return X.values, y.values, catagories
+    Y = df.drop('message', axis=1)
+    categories = Y.columns.values 
+    return X.values, Y.values, categories
 
 ##############################################################################
 
 def tokenize(text):
-    """ Tokenizes input text
+    ''' Tokenizes input text
     
     INPUT
     text (str): text data as str
     
     OUTPUT
     tokens (list): tokenized text
-    """
+    '''
 
     # Replace all urls with a urlplaceholder string
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
@@ -72,10 +79,69 @@ def tokenize(text):
 
 ##############################################################################
 
+def split_data(X, Y):
+    '''
+    '''
+    
+    mskf = mlsKFold(n_splits=2, shuffle=True, random_state=42)
+
+    for train_index, test_index in mskf.split(X, Y):
+        X_train, X_test = X[train_index], X[test_index]
+        Y_train, Y_test = Y[train_index], Y[test_index]
+    
+    return X_train, X_test, Y_train, Y_test
+
+##############################################################################
+
+def build_model():
+    '''
+    '''
+
+    pipeline = Pipeline([
+            ('vect', CountVectorizer(tokenizer=tokenize)),
+            ('tfidf', TfidfTransformer()),
+            ('clf', MultiOutputClassifier(KNeighborsClassifier()))
+        ])
+
+    return pipeline
+
+##############################################################################
+
+def save_model(model):
+    '''
+    '''
+    
+    with open('../models/message_classifier.pkl', "wb") as f:
+        pickle.dump(model, f)
+
+##############################################################################        
+
 def main():
-    X, y, cats = load_data()
-    tokens = tokenize(X[0])
-    print(tokens)
+    if len(sys.argv) == 2:
+        
+        print('Loading data...\n    DATABASE: /data/DisasterResponse.db')
+        X, Y, category_names = load_data()
+
+        print('Splitting data...\n')
+        X_train, X_test, Y_train, Y_test = split_data(X, Y)
+
+        print('Building model...\n')
+        model = build_model()
+
+        print('Training model...\n')
+        model.fit(X_train, Y_train)
+
+        print('Saving model...\n    MODEL: ../models/message_classifier')
+        save_model(model)
+
+        print('Trained model saved!')
+
+    else:
+        print(
+            'Please provide the filepath of the disaster messages database '
+            'as the first argument. \n\n'
+            'Example: python train_classifier.py ../data/DisasterResponse.db'
+            )
 
 if __name__ == '__main__':
     main()

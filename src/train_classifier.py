@@ -12,7 +12,7 @@ from iterstrat.ml_stratifiers import MultilabelStratifiedKFold as mlsKFold
 from sklearn.pipeline import Pipeline
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
-import pickle
+import dill
 
 
 nltk.download("stopwords")
@@ -119,7 +119,7 @@ def save_model(model):
     '''
     
     with open('../models/message_classifier.pkl', "wb") as f:
-        pickle.dump(model, f)
+        dill.dump(model, f)
 
 ##############################################################################        
 

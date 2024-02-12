@@ -7,3 +7,13 @@
     <h4 class="text-center">MESSAGE</h4>
     <p class="text-center"><i>{{query}}</i></p>
 {% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Result</h1>
+        <ul class="list-group">
+            {% for token in tokens %}
+                    <li class="list-group-item list-group-item-light text-center">{{token}}</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content%}

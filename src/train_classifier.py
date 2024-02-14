@@ -26,7 +26,7 @@ nltk.download("wordnet")
 
 ##############################################################################
 
-def load_data():
+def load_data(db_filepath):
     ''' Load database from DisasterResponse SQL database
 
     OUTPUT
@@ -35,7 +35,7 @@ def load_data():
         cats (list): list containing category names
     '''
     
-    engine = create_engine('sqlite:///../data/DisasterResponse.db')
+    engine = create_engine('sqlite:///' + db_filepath)
     table = 'MessageCategories'
     df = pd.read_sql_table(table, engine)
     
@@ -43,7 +43,7 @@ def load_data():
     df.loc[df['related'] == 2,'related'] = 1
 
     #Remove child alone as it has all zeros only
-    df.drop('child_alone', axis=1, inplace=True)
+    df.drop(['child_alone', 'genre'], axis=1, inplace=True)
 
     X = df.message
     Y = df.drop('message', axis=1)
@@ -197,8 +197,10 @@ def save_model(model):
 def main():
     if len(sys.argv) == 2:
         
-        print('Loading data...\n    DATABASE: /data/DisasterResponse.db')
-        X, Y, categories = load_data()
+        db_filepath = sys.argv[1]
+        
+        print('Loading data...\n    DATABASE: {}'.format(db_filepath))
+        X, Y, categories = load_data(db_filepath)
 
         print('Splitting data...\n')
         X_train, X_test, Y_train, Y_test = split_data(X, Y)
@@ -221,7 +223,7 @@ def main():
         print(
             'Please provide the filepath of the disaster messages database '
             'as the first argument. \n\n'
-            'Example: python train_classifier.py ../data/DisasterResponse.db'
+            'Example: python train_classifier.py data/DisasterResponse.db'
             )
 
 if __name__ == '__main__':

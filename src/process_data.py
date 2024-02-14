@@ -54,7 +54,7 @@ def clean_data(df):
     '''
     
     # Drop unnecessary columns
-    df.drop(['original','id','genre'], axis=1, inplace=True)
+    df.drop(['original','id'], axis=1, inplace=True)
     
     # Drop duplicates
     df.drop_duplicates(inplace=True)
@@ -66,7 +66,7 @@ def clean_data(df):
     df.drop(['categories', 'index'], axis=1, inplace=True)
     
     # Convert category columns to numeric
-    for col in df.columns.tolist():
+    for col in df.drop('genre', axis=1).columns.tolist():
         if col != 'message':
             df[col] = df[col].astype('int')
     
@@ -85,7 +85,7 @@ def save_data(df):
     """
 
     # save data into a sqlite database
-    engine = create_engine('sqlite:///../data/DisasterResponse.db')
+    engine = create_engine('sqlite:///data/DisasterResponse.db')
     df.to_sql(name='MessageCategories', con=engine, index=False, if_exists='replace')
 
 def main():

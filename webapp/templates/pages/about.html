@@ -2,11 +2,100 @@
 
 {% block header %}
   <h2>{% block title %}About{% endblock title %}</h2>
+  <p>In the face of natural disasters, timely and effective communication is
+    crucial. This webapp harnesses the power of real-world messages, sourced 
+    from <a href="https://appen.com/">Figure Eight (now Appen)</a>, to bring a technological edge to disaster 
+    response efforts. By analyzing messages shared via social media or sent 
+    directly to disaster relief organizations, we explore the potential for 
+    machine learning to help emergency personnel and responders.</p>
+  <br>
+  <p>View my project code on <a href="https://github.com/tristenwallace/disaster_response_message_classifier">github</a></p>
 {% endblock header %}
 
 {% block content %}
-  <p>This application will fetch data from the database to showcase 
-     informative visualizations and leverage the trained model for 
-     categorizing new messages into 35 distinct categories, 
-     addressing a Multi-Label Classification challenge. </p>
+  <div class="card border-dark mb-3">
+    <div class="card-header"><h3>Tech Stack</h3></div>
+    <div class="card-body text-dark">
+      <h5 class="card-title">Python & Flask:</h5>
+      <p class="card-text">For backend development and webapp functionality</p>
+
+      <h5 class="card-title">SQLite:</h5>
+      <p class="card-text">For structured and efficient data storage</p>
+
+      <h5 class="card-title">Pandas & Numpy:</h5>
+      <p class="card-text">For data manipulation and numerical analysis</p>
+
+      <h5 class="card-title">Plotly & Bootstrap:</h5>
+      <p class="card-text">Delivering interactive visualizations and responsive design</p>
+
+      <h5 class="card-title">Sklearn & nltk:</h5>
+      <p class="card-text">The core of our NLP and machine learning model, 
+        featuring LinearSVC, GridSearch, tokenization, lemmatization, and more</p>
+
+    </div>
+  </div>
+
+  <div class="card border-dark mb-3">
+    <div class="card-header"><h3>How Does The Model Work</h3></div>
+    <div class="card-body text-dark">
+      <p class="card-text">The message classifier is a Linear Support Vector (LinearSVC) model, 
+        tailored for Natural Language Processing (NLP). This model is adept at 
+        handling high-dimensional data and is particularly well-suited for text classification tasks, 
+        such as categorizing disaster response messages.</p>
+    
+      <h5 class="card-title">Preprocessing:</h5>
+      <p class="card-text">Utilizing NLP techniques like tokenization, lemmatization, and the removal of stopwords, 
+        we prepare the messages for analysis. This preprocessing stage is crucial for transforming 
+        raw text into a structured format that the model can understand.
+      </p>
+      
+      <h5 class="card-title">Feature Extraction:</h5>
+      <p class="card-text">The processed text data is then converted into numerical features using techniques like 
+        TF-IDF (Term Frequency-Inverse Document Frequency), which helps in highlighting the most 
+        relevant words for classification tasks.</p>
+      
+      <h5 class="card-title">Multi-Label Classification:</h5>
+      <p class="card-text">Our LinearSVC model is trained to perform Multi-Label Classification utilizing binary relevance, 
+        so that it can assign multiple categories to a single message. This is essential for disaster response 
+        messages, which often contain information pertinent to various emergency services and needs.
+      </p>
+      
+      <h5 class="card-title">Model Training and Evaluation:</h5>
+      <p class="card-text">We employ techniques like GridSearch and MultilabelStratifiedKFold for hyperparameter 
+        tuning and stratified data seperation in order to squeeze the best performace out of the model. 
+        The current weighted-f1 score of .35, which leaves much room for improvement. We'll discuss this
+        challenge next.</p>    
+    </div>
+  </div>
+
+  <div class="card border-dark mb-3">
+    <div class="card-header"><h3>Future Considerations</h3></div>
+    <div class="card-body text-dark">
+      <p class="card-text">There are a number of ways this app could be further improved:</p>
+
+      <h5 class="card-title">Model Performance:</h5>
+      <p class="card-text">We can continue to refine our model by exploring more sophisticated NLP 
+        methodologies, such as deep learning models and transformers (e.g., BERT, GPT), engineering new features, ensembling
+        methods, and different NLP techniques like word embeddings and semantic analysis.
+      </p>
+
+      <h5 class="card-title">Multilingual Support:</h5>
+      <p class="card-text">We could add multilingual support to our webapp, allowing users to input and classify messages
+        in various languages, thereby broadening reach and impact.
+      </p>
+
+      <h5 class="card-title">Deal With Label Imbalance:</h5>
+      <p class="card-text">We could implement strategies such as oversampling minority classes, undersampling majority 
+        classes, or synthesizing new examples through techniques like SMOTE (Synthetic Minority Over-sampling Technique). 
+        Additionally, we could try and incorporate other datasets that represent a broader and more balanced spectrum of 
+        disaster scenarios and response categories.
+      </p>
+
+      <h5 class="card-title">Real-Time Data Streams:</h5>
+      <p class="card-text">We could explore the possibility of integrating real-time data streams, enabling the webapp
+        to process live data from social media and other communication channels during disasters for immediate analysis
+        and response.
+      </p>
+
 {% endblock content %}
+

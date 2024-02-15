@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Result</h1>
+    <h1 class="text-center">Classification Results</h1>
         <ul class="list-group">
             {% for category, clf in clf_results.items() %}
                 {% if clf == 1 %}

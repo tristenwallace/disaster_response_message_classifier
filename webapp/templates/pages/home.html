@@ -1,3 +1,14 @@
 {% extends 'base.html' %}
 
 <h2>{% block title %}Home{% endblock title %}</h2>
+
+{% block content %}
+<div class="page-header">
+    <h1 class="text-center">Overview of Training Dataset</h1>
+</div>
+
+{% for id in ids %}
+    <div id="{{id}}"></div>
+{% endfor %}
+{% endblock content %}
+

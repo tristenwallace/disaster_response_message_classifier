@@ -6,7 +6,8 @@ sys.path.append('../src/')
 import model_utils as mu
 from sqlalchemy import create_engine
 import pandas as pd
-from nltk.tokenize import wordpunct_tokenize
+import plotly.graph_objs as go
+import plotly, json
 
 app = Flask(__name__)
 
@@ -17,12 +18,65 @@ df = pd.read_sql_table('MessageCategories', con=engine)
 # load model
 model = dill.load(open('../models/message_classifier.pkl', 'rb'))
 
+# Extract data
+genre_counts = df.groupby('genre').count()['message']
+genre_names = list(genre_counts.index)
+
 categories = list(df.columns[2:])
+cat_counts = df.iloc[:, 2:].sum()
 
 @app.route("/")
 @app.route('/home')
 def home():
-    return render_template("pages/home.html")
+    
+    # create visuals
+    graphs = [
+        {
+            'data': [
+                go.Bar(
+                    x=categories,
+                    y=cat_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category"
+                }
+            }
+        },
+        
+        {
+            'data': [go.Bar(
+                        x=genre_names,
+                        y=genre_counts
+                        )
+                    ],
+
+            'layout': {
+                'title': 'Distribution of Message Genres',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Genre"
+                }
+            }
+        }
+        
+    ]
+    
+    # encode plotly graphs in JSON
+    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    return render_template("pages/home.html",
+                            ids=ids,
+                            graphJSON=graphJSON)
 
 @app.route("/go")
 def response():

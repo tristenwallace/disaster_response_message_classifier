@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template, request
 import dill
 import sys
-sys.path.append('/home/tristenwallace/projects/udacity/data_science/disaster_response_message_classifier/src/')
+sys.path.append('../src/')
 import model_utils as mu
 from sqlalchemy import create_engine
 import pandas as pd
@@ -16,7 +16,7 @@ df = pd.read_sql_table('MessageCategories', con=engine)
 
 # load model
 model = dill.load(open('../models/message_classifier.pkl', 'rb'))
-print(model)
+
 categories = list(df.columns[2:])
 
 @app.route("/")

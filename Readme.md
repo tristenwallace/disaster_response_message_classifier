@@ -38,8 +38,7 @@ $ conda install dill
 | | |- home.html              # Main page of website
 | | |- go.html                # Classification result page of web app
 | | |- about.html             # About page with app information
-|- pages.py                   # Flask file that manages routes
-|- __init__.py                # Flask file that runs app
+|- app.py                   # Flask file that runs app
 
 - data
 |- disaster_categories.csv　  # data to process
@@ -49,6 +48,7 @@ $ conda install dill
 - src
 |- process_data.py            # Read, clean, and store data
 |- train_classifier.py        # machine learning pipeline
+|- model_utils.py             # helper functions for train_classifier.py 
 
 - models
 |- message_classifier.pkl  　　# saved model
@@ -75,10 +75,10 @@ $ conda install dill
     python src/train_classifier.py data/DisasterResponse.db
     ```
 
-2. Run the following command in the project's root directory to run your web app.
+2. Run the following command in the webapp root directory to run your web app.
 
     ```
-    python -m flask --app webapp run
+    flask run
     ```
 
 3. Go to

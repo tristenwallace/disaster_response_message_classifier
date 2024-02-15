@@ -3,7 +3,7 @@
 #### -- Project Status: [Active]
 
 ## Project Intro/Objective
-I'll perform comprehensive analysis of real messages, [sourced from Figure 8]((https://www.kaggle.com/datasets/sidharth178/disaster-response-messages?select=disaster_messages.csv)) and sent amidst natural disasters through social media or directly to disaster relief organizations. 
+I'll perform comprehensive analysis of real messages, [sourced from Figure 8](https://www.kaggle.com/datasets/sidharth178/disaster-response-messages?select=disaster_messages.csv) and sent amidst natural disasters through social media or directly to disaster relief organizations. 
 
 The objective is to construct an ETL (Extract, Transform, Load) pipeline to process the data contained in .csv files regarding messages and their categories, and subsequently store this data in an SQLite database. 
 
@@ -147,3 +147,7 @@ infrastructure_related       0.07      0.14      0.09
 * Pandas, Numpy, Jupyter
 * Plotly
 * Bootstrap
+
+## Resources
+* [Appen](https://www.kaggle.com/datasets/sidharth178/disaster-response-messages?select=disaster_messages.csv) for the dataset
+* [Udacity]((https://www.kaggle.com/datasets/sidharth178/disaster-response-messages?select=disaster_messages.csv)) for the project concept

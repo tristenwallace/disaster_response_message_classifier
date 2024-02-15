@@ -189,7 +189,7 @@ def save_model(model):
     ''' Save trained classification model to pickle file
     '''
     
-    with open('../models/message_classifier.pkl', "wb") as f:
+    with open('models/message_classifier.pkl', "wb") as f:
         dill.dump(model, f)
 
 ##############################################################################        
